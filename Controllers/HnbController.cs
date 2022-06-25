@@ -47,7 +47,12 @@ public class HnbController : ControllerBase
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
 
-            responseBody.ParseXml();
+            var items = responseBody.ParseXml();
+
+            foreach (var item in items.Item)
+            {
+                Console.WriteLine(item.Broj_tecajnice);
+            }
 
             return Ok(responseBody);
         }

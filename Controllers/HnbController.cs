@@ -1,8 +1,7 @@
 using System.Xml;
-using System.Xml.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using vanb.Helpers;
 using vanb.Requests;
-using vanb.Response;
 using vanb.Routes;
 
 namespace vanb.Controllers;
@@ -20,7 +19,7 @@ public class HnbController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost(ApiRoute.PostRoute.FindDiffInPar)]
+    [HttpPost(ApiRoute.PostRoute.GetDiff)]
     public async Task<ActionResult> GetHnbData([FromBody] PostRequest requestData)
     {
         if (requestData.Datum is null || requestData.Par is null)
@@ -28,13 +27,11 @@ public class HnbController : ControllerBase
             return BadRequest("Loše uneseni podaci");
         }
 
-
         var endDate = DateTime.Parse(requestData.Datum);
-        var daysInMOnth = DateTime.DaysInMonth(endDate.Year, endDate.Month) * -1;
-  
+        var daysInMonthCalc = DateTime.DaysInMonth(endDate.Year, endDate.Month) * -1;
 
-        var periodStart = endDate.AddDays(daysInMOnth).ToString("yyyy-MM-dd");
-        var currencies = requestData.Par.Split('_');
+        var periodStart = endDate.AddDays(daysInMonthCalc).ToString("yyyy-MM-dd");
+        var currencies = requestData.Par.Split('_', 2);
 
         if (currencies.Length != 2)
         {
@@ -43,7 +40,6 @@ public class HnbController : ControllerBase
 
         string url = $"https://api.hnb.hr/tecajn/v2?datum-primjene-od={periodStart}&datum-primjene-do={requestData.Datum}&valuta={currencies[0]}&valuta={currencies[1]}&format=xml";
 
-
         try
         {
             HttpResponseMessage response = await client.GetAsync(url);
@@ -51,10 +47,9 @@ public class HnbController : ControllerBase
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
 
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(responseBody);
+            responseBody.ParseXml();
 
-            return Ok(xmlDoc.InnerXml);
+            return Ok(responseBody);
         }
         catch (System.Exception e)
         {

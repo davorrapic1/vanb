@@ -7,9 +7,9 @@ namespace vanb.Routes
 
         public const string Base = $"{Root}/{Version}";
 
-        public static class PostRoute 
+        public static class PostRoute
         {
-            public const string FindDiffInPar = Base + "/findDiffInPar";
+            public const string GetDiff = Base + "/getdiff";
         }
     }
 }

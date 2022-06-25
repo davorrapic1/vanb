@@ -28,21 +28,21 @@ public class HnbController : ControllerBase
             return BadRequest("Loše uneseni podaci");
         }
 
-   
-        #region I hate magic numbers -30
-        var dateArray = requestData.Datum.Split('-');
-        var daysInMOnth = DateTime.DaysInMonth(Int32.Parse(dateArray[0]), Int32.Parse(dateArray[1]));
-        #endregion
 
-        var periodStart = DateTime.Parse(requestData.Datum).AddDays(daysInMOnth).ToString("yyyy-MM-dd");
+        var endDate = DateTime.Parse(requestData.Datum);
+        var daysInMOnth = DateTime.DaysInMonth(endDate.Year, endDate.Month) * -1;
+  
+
+        var periodStart = endDate.AddDays(daysInMOnth).ToString("yyyy-MM-dd");
         var currencies = requestData.Par.Split('_');
 
         if (currencies.Length != 2)
         {
-            return BadRequest("Invalid number of currencies");
+            return BadRequest("Loše upisane valute");
         }
 
         string url = $"https://api.hnb.hr/tecajn/v2?datum-primjene-od={periodStart}&datum-primjene-do={requestData.Datum}&valuta={currencies[0]}&valuta={currencies[1]}&format=xml";
+
 
         try
         {

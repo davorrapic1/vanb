@@ -1,5 +1,6 @@
 using System.Xml;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using vanb.Helpers;
 using vanb.Requests;
 using vanb.Routes;
@@ -47,12 +48,9 @@ public class HnbController : ControllerBase
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
 
-            var items = responseBody.ParseXml();
+            TecajnaLista items = responseBody.ParseXml();
 
-            foreach (var item in items.Item)
-            {
-                Console.WriteLine(item.Broj_tecajnice);
-            }
+            
 
             return Ok(responseBody);
         }

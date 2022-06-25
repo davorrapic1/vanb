@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Models;
 
 namespace vanb.Context
 {
@@ -6,6 +7,7 @@ namespace vanb.Context
     {
         public DataContext (DbContextOptions<DataContext> options) : base (options)
         { }
+
 
         protected override void OnConfiguring (DbContextOptionsBuilder optionsBuilder)
         {

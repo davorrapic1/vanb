@@ -36,6 +36,9 @@ public class HnbController : ControllerBase
         var periodStart = endDate.AddDays(daysInMonthCalc).ToString("yyyy-MM-dd");
         var currencies = requestData.Par.Split('_', 2);
 
+        var checkDb = await _dbService.GetTecajeviRazmjeneByDate(DateTime.Parse(periodStart), endDate);
+        
+
         if (currencies.Length != 2)
         {
             return BadRequest("Loše upisane valute");

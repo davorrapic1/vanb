@@ -1,4 +1,4 @@
-namespace vanb.Requests
+namespace Requests
 {
     public class PostRequest
     {

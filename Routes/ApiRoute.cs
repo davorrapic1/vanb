@@ -1,4 +1,4 @@
-namespace vanb.Routes
+namespace Routes
 {
     public static class ApiRoute
     {

@@ -1,23 +1,25 @@
-using System.Xml;
 using Microsoft.AspNetCore.Mvc;
-using Models;
-using vanb.Helpers;
-using vanb.Requests;
-using vanb.Routes;
+using Requests;
+using Routes;
+using Services;
 
-namespace vanb.Controllers;
+namespace Controllers;
 
 [ApiController]
 [Route("[controller]")]
 public class HnbController : ControllerBase
 {
-    static readonly HttpClient client = new HttpClient();
 
+    private readonly IHttpServiceHnb _httpService;
+    private readonly IDbService _dbService;
     private readonly ILogger<HnbController> _logger;
 
-    public HnbController(ILogger<HnbController> logger)
+    public HnbController(ILogger<HnbController> logger, IDbService dbService, IHttpServiceHnb httpService)
     {
+
         _logger = logger;
+        _dbService = dbService;
+        _httpService = httpService;
     }
 
     [HttpPost(ApiRoute.PostRoute.GetDiff)]
@@ -41,22 +43,11 @@ public class HnbController : ControllerBase
 
         string url = $"https://api.hnb.hr/tecajn/v2?datum-primjene-od={periodStart}&datum-primjene-do={requestData.Datum}&valuta={currencies[0]}&valuta={currencies[1]}&format=xml";
 
-        try
-        {
-            HttpResponseMessage response = await client.GetAsync(url);
+        var mappedItems = await _httpService.GetDataFromHnb(url, currencies);
 
-            response.EnsureSuccessStatusCode();
-            string responseBody = await response.Content.ReadAsStringAsync();
+        var result = await _dbService.SaveTecajeviRazmjene(mappedItems);
 
-            TecajnaLista items = responseBody.ParseXml();
+        return Ok(mappedItems);
 
-            
-
-            return Ok(responseBody);
-        }
-        catch (System.Exception e)
-        {
-            return StatusCode(500, e.Message);
-        }
     }
 }

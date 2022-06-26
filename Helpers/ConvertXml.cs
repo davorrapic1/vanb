@@ -1,18 +1,14 @@
-using System.Xml;
 using System.Xml.Serialization;
 using Models;
 
-namespace vanb.Helpers
+namespace Helpers
 {
     public static class ConvertXml
     {
-        public static TecajnaLista ParseXml(this string xml)
+        public static TecajnaListaXML ParseXml(this string xml)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xml);
-            XmlSerializer serializer = new XmlSerializer(typeof(TecajnaLista));
-            return (TecajnaLista) serializer.Deserialize(new StringReader(xml));
-
+            XmlSerializer serializer = new XmlSerializer(typeof(TecajnaListaXML));
+            return (TecajnaListaXML) serializer.Deserialize(new StringReader(xml));
         }
     }
 }

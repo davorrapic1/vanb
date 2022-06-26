@@ -37,7 +37,7 @@
        }
 
        [XmlRoot(ElementName = "tecajna_lista")]
-       public class TecajnaLista
+       public class TecajnaListaXML
        {
            [XmlElement(ElementName = "item")]
            public List<Item> Item { get; set; }

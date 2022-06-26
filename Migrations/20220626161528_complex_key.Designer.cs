@@ -3,6 +3,7 @@ using System;
 using Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace vanb.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220626161528_complex_key")]
+    partial class complex_key
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.6");
@@ -55,7 +57,10 @@ namespace vanb.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TecajiRazmjene", (string)null);
+                    b.HasIndex("BrojTecajnice", "SifraValute")
+                        .IsUnique();
+
+                    b.ToTable("TecajiRazmjene");
                 });
 #pragma warning restore 612, 618
         }

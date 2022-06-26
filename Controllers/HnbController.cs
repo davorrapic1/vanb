@@ -36,17 +36,22 @@ public class HnbController : ControllerBase
         var periodStart = endDate.AddDays(daysInMonthCalc).ToString("yyyy-MM-dd");
         var currencies = requestData.Par.Split('_', 2);
 
-        var checkDb = await _dbService.GetTecajeviRazmjeneByDate(DateTime.Parse(periodStart), endDate);
-        
-
-        if (currencies.Length != 2)
+        var checkDb = await _dbService.CheckIfDataExistsForDateRange(DateTime.Parse(periodStart), endDate, daysInMonthCalc);
+         if (currencies.Length != 2)
         {
             return BadRequest("Loše upisane valute");
         }
 
-        string url = $"https://api.hnb.hr/tecajn/v2?datum-primjene-od={periodStart}&datum-primjene-do={requestData.Datum}&valuta={currencies[0]}&valuta={currencies[1]}&format=xml";
+        if (!checkDb) 
+        {
+            await _dbService.UpdateMissingDates(DateTime.Parse(periodStart), endDate, currencies);
+        }
 
-        var mappedItems = await _httpService.GetDataFromHnb(url, currencies);
+       
+
+       
+
+        var mappedItems = await _httpService.GetDataFromHnb(periodStart,requestData.Datum, currencies);
 
         var result = await _dbService.SaveTecajeviRazmjene(mappedItems);
 

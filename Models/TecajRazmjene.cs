@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Models
 {
     public class TecajRazmjene
@@ -13,6 +15,7 @@ namespace Models
         public string SrednjiTecaj { get; set; }
         public string ProdajniTecaj { get; set; }
         public string KupovniTecaj { get; set; }
+
     }
 
     public class Tecajevi

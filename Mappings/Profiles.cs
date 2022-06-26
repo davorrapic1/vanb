@@ -8,7 +8,7 @@ namespace vanb.Mappings
         public Profiles()
         {
             CreateMap<Item, TecajRazmjeneDTO>()
-                .ForMember(dest => dest.DatumPrimjene, opt => opt.MapFrom(src =>  DateTime.Parse(src.DatumPrimjene)));
+                .ForMember(dest => dest.DatumPrimjene, opt => opt.MapFrom(src => DateTime.Parse(src.DatumPrimjene)));
 
             CreateMap<TecajRazmjeneDTO, TecajRazmjene>();
         }

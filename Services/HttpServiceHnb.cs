@@ -14,8 +14,10 @@ namespace Services
             _mapper = mapper;
         }
         static readonly HttpClient client = new HttpClient();
-        public async Task<TecajeviDTO> GetDataFromHnb(string url, string[] currencies)
+        public async Task<TecajeviDTO> GetDataFromHnb(string startDate, string endDate, string[] currencies)
         {
+
+             string url = $"https://api.hnb.hr/tecajn/v2?datum-primjene-od={startDate}&datum-primjene-do={endDate}&valuta={currencies[0]}&valuta={currencies[1]}&format=xml";
             HttpResponseMessage response = await client.GetAsync(url);
 
             response.EnsureSuccessStatusCode();
@@ -23,7 +25,7 @@ namespace Services
 
             TecajnaListaXML items = responseBody.ParseXml();
 
-            var mappedItems = new TecajeviDTO
+            TecajeviDTO mappedItems = new TecajeviDTO
             {
                 TecajeviRazmjene = _mapper.Map<List<TecajRazmjeneDTO>>(items.Item)
             };

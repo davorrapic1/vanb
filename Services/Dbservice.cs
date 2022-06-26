@@ -18,16 +18,23 @@ namespace Services
 
         }
 
-        public async Task<Boolean> CheckIfDataExistsForDateRange(DateTime startDate, DateTime endDate, int days)
+        public async Task< List<TecajRazmjene>> CheckIfDataExistsForDateRange(DateTime startDate, DateTime endDate, int days)
         {
             var data = await GetTecajeviRazmjeneByDate(startDate, endDate);
 
-            if (data.Count == days * 2)
+            if (data.Count == Math.Abs((days - 2 )* 2))
             {
-                return true;
+                return data;
+            }
+            else
+            {
+                return null;
+            }
+            {
+                return data;
             }
 
-            return false;
+            return null;
         }
 
         public async Task<List<TecajRazmjene>> GetTecajeviRazmjeneByDate(DateTime startDate, DateTime endDate)
@@ -49,19 +56,26 @@ namespace Services
 
             if (await _context.SaveChangesAsync() > 0)
             {
+
                 return true;
             }
 
             return false;
         }
 
-        public async Task UpdateMissingDates(DateTime startDate, DateTime endDate, string[] currencies)
+        public async Task<List<TecajRazmjene>> UpdateMissingDates(DateTime startDate, DateTime endDate, TecajeviDTO freshData)
         {
             var data = await GetTecajeviRazmjeneByDate(startDate, endDate);
 
             var dates = data.Select(x => x.DatumPrimjene).OrderBy(x => x).ToList();
+            
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                var newData = await GetTecajeviRazmjeneByDate(startDate, endDate);
+                return newData;
+            }
 
-
+            return null;
         }
  
     }

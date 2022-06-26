@@ -8,8 +8,8 @@ namespace Services
 
         Task<List<TecajRazmjene>> GetTecajeviRazmjeneByDate(DateTime startDate, DateTime endDate);
 
-        Task<Boolean> CheckIfDataExistsForDateRange(DateTime startDate, DateTime endDate, int days);
+        Task< List<TecajRazmjene>> CheckIfDataExistsForDateRange(DateTime startDate, DateTime endDate, int days);
 
-        Task UpdateMissingDates(DateTime startDate, DateTime endDate, string[] currencies);
+        Task<List<TecajRazmjene>> UpdateMissingDates(DateTime startDate, DateTime endDate, TecajeviDTO freshData);
     }
 }

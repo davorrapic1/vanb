@@ -32,30 +32,40 @@ public class HnbController : ControllerBase
 
         var endDate = DateTime.Parse(requestData.Datum);
         var daysInMonthCalc = DateTime.DaysInMonth(endDate.Year, endDate.Month) * -1;
-
-        var periodStart = endDate.AddDays(daysInMonthCalc).ToString("yyyy-MM-dd");
+        var startDate = endDate.AddDays(daysInMonthCalc);
         var currencies = requestData.Par.Split('_', 2);
 
-        var checkDb = await _dbService.CheckIfDataExistsForDateRange(DateTime.Parse(periodStart), endDate, daysInMonthCalc);
-         if (currencies.Length != 2)
+        if (currencies.Length != 2)
         {
             return BadRequest("Loše upisane valute");
         }
 
-        if (!checkDb) 
+
+        var isValidData = await _dbService.CheckIfDataExistsForDateRange(startDate, endDate, daysInMonthCalc);
+
+        if (isValidData is not null)
         {
-            await _dbService.UpdateMissingDates(DateTime.Parse(periodStart), endDate, currencies);
+            // parse valid data to response model
+
+            return Ok(isValidData);
         }
 
-       
+        var newItemsDTO = await _httpService.GetDataFromHnb(startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"), currencies);
 
-       
+        var savedData = await _dbService.SaveTecajeviRazmjene(newItemsDTO);
 
-        var mappedItems = await _httpService.GetDataFromHnb(periodStart,requestData.Datum, currencies);
 
-        var result = await _dbService.SaveTecajeviRazmjene(mappedItems);
+        if (savedData)
+        {
+            var data = await _dbService.GetTecajeviRazmjeneByDate(startDate, endDate);
 
-        return Ok(mappedItems);
+            // parse valid data to response model
+
+            return Ok(data);
+        }
+
+        return BadRequest("Podaci nisu spremljeni");
+
 
     }
 }

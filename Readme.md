@@ -9,14 +9,13 @@ dotnet restore
 dotnet publish -c Release || dotnet run -c Release
 ```
 
-
 ### Tasks
 
-[X] Create a webapi
-[X] Use C#
-[X] Create an endpoint to accept a post request with body content
-[X] Get data from http://api.hnb.hr/
-[X] Data must be in XML format
-[X] Save data to DB
-[X] Create a response with two fields
-[] Show a field with 5 decimal places
+- [x] Create a webapi
+- [x] Use C#
+- [x] Create an endpoint to accept a post request with body content
+- [x] Get data from http://api.hnb.hr/
+- [x] Data must be in XML format
+- [x] Save data to DB
+- [x] Create a response with two fields
+- [] Show a field with 5 decimal places

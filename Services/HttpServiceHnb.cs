@@ -19,10 +19,9 @@ namespace Services
 
              string url = $"https://api.hnb.hr/tecajn/v2?datum-primjene-od={startDate}&datum-primjene-do={endDate}&valuta={currencies[0]}&valuta={currencies[1]}&format=xml";
             HttpResponseMessage response = await client.GetAsync(url);
-
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
-
+            
             TecajnaListaXML items = responseBody.ParseXml();
 
             TecajeviDTO mappedItems = new TecajeviDTO

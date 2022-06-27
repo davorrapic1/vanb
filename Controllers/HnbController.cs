@@ -18,7 +18,6 @@ public class HnbController : ControllerBase
 
     public HnbController(ILogger<HnbController> logger, IDbService dbService, IHttpServiceHnb httpService)
     {
-
         _logger = logger;
         _dbService = dbService;
         _httpService = httpService;
@@ -42,34 +41,25 @@ public class HnbController : ControllerBase
             return BadRequest("Loše upisane valute");
         }
 
-
         var isValidData = await _dbService.CheckIfDataExistsForDateRange(startDate, endDate, daysInMonthCalc);
 
         if (isValidData is not null)
         {
             var parsedData = parseDate(isValidData);
-
             return Ok(parsedData);
         }
 
         var newItemsDTO = await _httpService.GetDataFromHnb(startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"), currencies);
-
         var savedData = await _dbService.SaveTecajeviRazmjene(newItemsDTO);
 
 
         if (savedData)
         {
-            var data = await _dbService.GetTecajeviRazmjeneByDate(startDate, endDate);
-
-    
+            var data = await _dbService.GetTecajeviRazmjeneByDate(startDate, endDate);    
             var parsedData = parseDate(data);
-
             return Ok(parsedData);
         }
-
         return BadRequest("Podaci nisu spremljeni");
-
-
     }
 
     private List<HttpResponseObject> parseDate(List<TecajRazmjene> data)

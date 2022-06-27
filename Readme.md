@@ -18,4 +18,30 @@ dotnet publish -c Release || dotnet run -c Release
 - [x] Data must be in XML format
 - [x] Save data to DB
 - [x] Create a response with two fields
-- [] Show a field with 5 decimal places
+- [ ] Show a field with 5 decimal places
+
+### Idea behind the project
+
+Consumer sends a POST request with the body content of the request.
+
+```
+{
+  "Datum": "2022-6-1",
+  "Par": "GBP-EUR"
+}
+```
+
+Server responds with an array of objects.
+
+```
+[
+  {
+    "Datum": "2022-6-1",
+    "Odnos": "1.234567"
+  },
+  {
+    "Datum": "2022-6-1",
+    "Odnos": "1.234567"
+  }
+]
+```

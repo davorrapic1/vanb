@@ -45,3 +45,12 @@ Server responds with an array of objects.
   }
 ]
 ```
+
+When a consumer makes the request service checks the database (SQLITE) if there is data for the date range given by the consumer. 
+
+If there is no data in DB, service makes a request to the API fatching the XML data. Then it parses the data and saves it to the SQLITE database and the database gives the data to the consumer. 
+
+Where I missed the spot:
+- No smart database insert (possible multiple inserts)
+- No cache
+- Not optimized for performance

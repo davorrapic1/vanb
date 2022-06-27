@@ -6,6 +6,7 @@
 git clone <repo url>
 cd <repo name>
 dotnet restore
+dotnet ef database update (run code first migrations against the database)
 dotnet publish -c Release || dotnet run -c Release
 ```
 
@@ -18,7 +19,7 @@ dotnet publish -c Release || dotnet run -c Release
 - [x] Data must be in XML format
 - [x] Save data to DB
 - [x] Create a response with two fields
-- [ ] Show a field with 5 decimal places
+- [x] Show a field with 5 decimal places
 
 ### Idea behind the project
 
@@ -54,3 +55,12 @@ Where I missed the spot:
 - No smart database insert (possible multiple inserts)
 - No cache
 - Not optimized for performance
+
+
+
+### TODO
+
+- [ ] optimize for performance
+- [ ] Check if date exists in DB
+- [ ] If exists skip insert
+- [ ] cache responses via CustomAttributes for better performance 

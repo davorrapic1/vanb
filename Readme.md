@@ -21,6 +21,9 @@ dotnet publish -c Release || dotnet run -c Release
 - [x] Create a response with two fields
 - [x] Show a field with 5 decimal places
 
+### Not in tasks but would be nice
+- [ ] robust error handling
+
 ### Idea behind the project
 
 Consumer sends a POST request with the body content of the request.
@@ -64,3 +67,4 @@ Where I missed the spot:
 - [ ] Check if date exists in DB
 - [ ] If exists skip insert
 - [ ] cache responses via CustomAttributes for better performance 
+- [ ] robust error handling

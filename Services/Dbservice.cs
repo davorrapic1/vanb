@@ -22,24 +22,18 @@ namespace Services
         {
             var data = await GetTecajeviRazmjeneByDate(startDate, endDate);
 
-            if (data.Count == Math.Abs((days - 2 )* 2))
-            {
-                return data;
-            }
-            else
-            {
-                return null;
-            }
-            {
-                return data;
-            }
 
+            if (data.Count == Math.Abs((days - 1 )* 2))
+            {
+                return data;
+            }
+     
             return null;
         }
 
         public async Task<List<TecajRazmjene>> GetTecajeviRazmjeneByDate(DateTime startDate, DateTime endDate)
         {
-            var tecajevi = await _context.TecajiRazmjene.Where(x => x.DatumPrimjene >= startDate && x.DatumPrimjene <= endDate).ToListAsync();
+            var tecajevi = await _context.TecajiRazmjene.Where(x => x.DatumPrimjene >= startDate && x.DatumPrimjene <= endDate).OrderBy(x => x.DatumPrimjene).ToListAsync();
 
             return tecajevi;
         }
@@ -47,6 +41,8 @@ namespace Services
         public async Task<Boolean> SaveTecajeviRazmjene(TecajeviDTO tecajeviForSave)
         {
             var tecajeviRazmjene = tecajeviForSave.TecajeviRazmjene;
+
+             
 
             foreach (var tecaj in tecajeviRazmjene)
             {

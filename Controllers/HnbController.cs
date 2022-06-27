@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Requests;
+using Response;
 using Routes;
 using Services;
 
@@ -45,9 +47,9 @@ public class HnbController : ControllerBase
 
         if (isValidData is not null)
         {
-            // parse valid data to response model
+            var parsedData = parseDate(isValidData);
 
-            return Ok(isValidData);
+            return Ok(parsedData);
         }
 
         var newItemsDTO = await _httpService.GetDataFromHnb(startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"), currencies);
@@ -59,13 +61,46 @@ public class HnbController : ControllerBase
         {
             var data = await _dbService.GetTecajeviRazmjeneByDate(startDate, endDate);
 
-            // parse valid data to response model
+    
+            var parsedData = parseDate(data);
 
-            return Ok(data);
+            return Ok(parsedData);
         }
 
         return BadRequest("Podaci nisu spremljeni");
 
 
+    }
+
+    private List<HttpResponseObject> parseDate(List<TecajRazmjene> data)
+    {
+
+        // ovo treba optiomizirati
+
+        var lists = new List<List<TecajRazmjene>>();
+    
+        for (int i = 0; i < data.Count; i++)
+        {
+            for (int j = 0; j < data.Count; j++)
+            {
+                if (data[i].DatumPrimjene == data[j].DatumPrimjene)
+                {
+                    lists.Add(new List<TecajRazmjene> { data[i], data[j] });
+                }
+            }
+        }
+
+        var httpResponseObject = new List<HttpResponseObject>();
+
+        // srediti matematiku
+        foreach (var list in lists)
+        {
+            var httpResponseObjectItem = new HttpResponseObject();
+            httpResponseObjectItem.Datum = list[0].DatumPrimjene.ToString("yyyy-MM-dd");
+            httpResponseObjectItem.Odnos = (Decimal.Parse(list[1].SrednjiTecaj) / Decimal.Parse(list[0].SrednjiTecaj)).ToString("N5");
+            httpResponseObject.Add(httpResponseObjectItem);
+        }
+
+        return httpResponseObject;
     }
 }

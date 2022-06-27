@@ -7,6 +7,6 @@ namespace Response
     {
 
         public string Datum { get; set; } = null!;
-        public string Odnos { get; set; } = null!;
+        public string Odnos { get; set; }
     }
 }
